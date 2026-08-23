@@ -13,6 +13,7 @@ from datetime import date
 from flask import Flask, render_template, request, jsonify, abort, Response, url_for
 
 from data import CALCULATORS, ORDER, TIER_ORDER
+from icons import icon_for
 
 app = Flask(__name__)
 
@@ -78,7 +79,7 @@ def to_lb(value, unit):
 # --------------------------------------------------------------------
 @app.route("/")
 def hub():
-    cards = [{"slug": s, **CALCULATORS[s]} for s in ORDER]
+    cards = [{"slug": s, "icon": icon_for(CALCULATORS[s]["category"]), **CALCULATORS[s]} for s in ORDER]
     return render_template("hub.html", cards=cards)
 
 
@@ -141,6 +142,7 @@ def calculator_page(slug):
         related=related,
         tier_order=TIER_ORDER,
         table_data=table_data,
+        icon=icon_for(calc["category"]),
     )
 
 

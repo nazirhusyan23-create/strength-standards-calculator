@@ -9,14 +9,30 @@
     lift or bodyweight move. Each calculator estimates your one-rep max (or
     reps/hold time), then ranks it against Beginner through Elite standards.
   </p>
+  <div class="hero-gauge" aria-hidden="true">
+    <div class="hero-gauge-track">
+      <span class="hero-gauge-fill"></span>
+      <span class="hero-gauge-seg">Beginner</span>
+      <span class="hero-gauge-seg">Novice</span>
+      <span class="hero-gauge-seg">Intermediate</span>
+      <span class="hero-gauge-seg">Advanced</span>
+      <span class="hero-gauge-seg">Elite</span>
+    </div>
+  </div>
 </section>
 
 <section class="hub-grid wrap">
   {% for c in cards %}
   <a class="hub-card" href="{{ url_for('calculator_page', slug=c.slug) }}">
-    <span class="hub-card-cat">{{ c.category }}</span>
+    <div class="hub-card-top">
+      <span class="hub-card-icon">{{ c.icon }}</span>
+      <span class="hub-card-cat">{{ c.category }}</span>
+    </div>
     <span class="hub-card-name">{{ c.name }}</span>
-    <span class="hub-card-cta">Calculate &rarr;</span>
+    <div class="hub-card-gauge" aria-hidden="true">
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <span class="hub-card-cta">Calculate <em>&rarr;</em></span>
   </a>
   {% endfor %}
 </section>
