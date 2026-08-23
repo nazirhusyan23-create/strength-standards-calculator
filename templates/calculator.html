@@ -21,18 +21,26 @@
   <section class="calc-grid">
     <!-- ----------------------------- FORM ----------------------------- -->
     <form class="calc-form" id="calc-form" autocomplete="off">
+      <div class="panel-head">
+        <span class="panel-head-icon">{{ icon }}</span>
+        <span>Enter your set</span>
+      </div>
 
       <div class="field-row">
         <fieldset class="field">
           <legend>Sex</legend>
-          <label class="pill"><input type="radio" name="sex" value="male" checked> Male</label>
-          <label class="pill"><input type="radio" name="sex" value="female"> Female</label>
+          <div class="toggle-row">
+            <label class="toggle-pill"><input type="radio" name="sex" value="male" checked><span>Male</span></label>
+            <label class="toggle-pill"><input type="radio" name="sex" value="female"><span>Female</span></label>
+          </div>
         </fieldset>
 
         <fieldset class="field">
           <legend>Units</legend>
-          <label class="pill"><input type="radio" name="unit" value="lb" checked> lb</label>
-          <label class="pill"><input type="radio" name="unit" value="kg"> kg</label>
+          <div class="toggle-row">
+            <label class="toggle-pill"><input type="radio" name="unit" value="lb" checked><span>lb</span></label>
+            <label class="toggle-pill"><input type="radio" name="unit" value="kg"><span>kg</span></label>
+          </div>
         </fieldset>
       </div>
 
@@ -67,8 +75,10 @@
         {% if calc.has_variant_toggle %}
         <fieldset class="field">
           <legend>Variant</legend>
-          <label class="pill"><input type="radio" name="variant" value="wall" checked> Wall-assisted</label>
-          <label class="pill"><input type="radio" name="variant" value="freestanding"> Freestanding</label>
+          <div class="toggle-row">
+            <label class="toggle-pill"><input type="radio" name="variant" value="wall" checked><span>Wall-assisted</span></label>
+            <label class="toggle-pill"><input type="radio" name="variant" value="freestanding"><span>Freestanding</span></label>
+          </div>
         </fieldset>
         {% endif %}
         <div class="field">
@@ -93,6 +103,11 @@
 
     <!-- ---------------------------- RESULTS ---------------------------- -->
     <div class="calc-result" id="calc-result" hidden>
+      <div class="panel-head panel-head-result">
+        <span class="panel-head-icon">{{ icon }}</span>
+        <span>Your result</span>
+      </div>
+
       <div class="result-tier">
         <span class="result-tier-label">Your tier</span>
         <span class="result-tier-name" id="result-tier-name">—</span>
@@ -113,8 +128,21 @@
     </div>
 
     <div class="calc-result calc-result-empty" id="calc-result-empty">
+      <span class="empty-icon">{{ icon }}</span>
       <p>Fill in the form and hit <strong>Calculate my tier</strong> to see your
       estimated {{ 'one-rep max, ' if calc.input_type in ('reps_weighted','ratio_external') else '' }}strength ratio, and where you land from Beginner to Elite.</p>
+    </div>
+  </section>
+
+  <!-- ---------------------- HOW TO TEST / IMPROVE ----------------------- -->
+  <section class="howto-section">
+    <div class="howto-card">
+      <h2>How to test your {{ calc.short|lower }} correctly</h2>
+      <p>{{ calc.how_to_test }}</p>
+    </div>
+    <div class="howto-card">
+      <h2>How to improve your {{ calc.short|lower }}</h2>
+      <p>{{ calc.how_to_improve }}</p>
     </div>
   </section>
 
