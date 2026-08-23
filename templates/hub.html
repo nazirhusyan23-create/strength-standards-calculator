@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Strength Standards Calculators — 15 Free Tools{% endblock %}
+{% block content %}
+<section class="hub-hero wrap">
+  <p class="eyebrow">15 calculators, one plate-loading scale</p>
+  <h1>Am I strong? <span class="accent">Find out in one set.</span></h1>
+  <p class="hub-sub">
+    Enter your bodyweight, sex, and a set you've actually performed — barbell
+    lift or bodyweight move. Each calculator estimates your one-rep max (or
+    reps/hold time), then ranks it against Beginner through Elite standards.
+  </p>
+</section>
+
+<section class="hub-grid wrap">
+  {% for c in cards %}
+  <a class="hub-card" href="{{ url_for('calculator_page', slug=c.slug) }}">
+    <span class="hub-card-cat">{{ c.category }}</span>
+    <span class="hub-card-name">{{ c.name }}</span>
+    <span class="hub-card-cta">Calculate &rarr;</span>
+  </a>
+  {% endfor %}
+</section>
+{% endblock %}

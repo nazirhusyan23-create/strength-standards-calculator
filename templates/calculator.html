@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+{% block title %}{{ calc.name }} Strength Standards Calculator — Am I Strong? (Free){% endblock %}
+{% block meta_desc %}{{ calc.seo_keywords.secondary[0]|capitalize }}? Use this free {{ calc.seo_keywords.primary }} to estimate your {{ calc.short|lower }} 1RM and see your strength tier — Beginner to Elite — for your bodyweight and sex.{% endblock %}
+
+{% block extra_head %}
+<meta name="keywords" content="{{ calc.seo_keywords.primary }}, {{ calc.seo_keywords.secondary|join(', ') }}">
+{% for kw in [calc.seo_keywords.primary] + calc.seo_keywords.secondary %}
+<!-- target keyword: {{ kw }} -->
+{% endfor %}
+{% endblock %}
+
+{% block content %}
+<article class="calc-page wrap" data-slug="{{ slug }}" data-input-type="{{ calc.input_type }}"
+         {% if calc.has_variant_toggle %}data-variant-toggle="1"{% endif %}
+         {% if calc.get('always_show_added_weight') %}data-always-added="1"{% endif %}>
+
+  <p class="eyebrow">{{ calc.category }}</p>
+  <h1>{{ calc.name }} Strength Standards Calculator</h1>
+  <p class="intro">{{ calc.intro }}</p>
+
+  <section class="calc-grid">
+    <!-- ----------------------------- FORM ----------------------------- -->
+    <form class="calc-form" id="calc-form" autocomplete="off">
+
+      <div class="field-row">
+        <fieldset class="field">
+          <legend>Sex</legend>
+          <label class="pill"><input type="radio" name="sex" value="male" checked> Male</label>
+          <label class="pill"><input type="radio" name="sex" value="female"> Female</label>
+        </fieldset>
+
+        <fieldset class="field">
+          <legend>Units</legend>
+          <label class="pill"><input type="radio" name="unit" value="lb" checked> lb</label>
+          <label class="pill"><input type="radio" name="unit" value="kg"> kg</label>
+        </fieldset>
+      </div>
+
+      <div class="field">
+        <label for="bodyweight">Bodyweight</label>
+        <input type="number" id="bodyweight" name="bodyweight" min="0" step="0.1" placeholder="e.g. 170" required>
+      </div>
+
+      {% if calc.input_type in ("reps_weighted",) %}
+        <div class="field" id="added-weight-field" {% if not calc.get('always_show_added_weight') %}data-optional="1"{% endif %}>
+          <label for="added_weight">
+            Added weight <span class="hint">(0 if bodyweight only)</span>
+          </label>
+          <input type="number" id="added_weight" name="added_weight" min="0" step="0.1" value="0">
+        </div>
+        <div class="field">
+          <label for="reps">Reps performed</label>
+          <input type="number" id="reps" name="reps" min="1" max="12" step="1" placeholder="e.g. 8" required>
+          <span class="hint">Capped at 12 reps for formula accuracy.</span>
+        </div>
+      {% elif calc.input_type == "ratio_external" %}
+        <div class="field">
+          <label for="weight_lifted">Weight lifted{% if calc.get('faq_reps_note') %} (total load){% endif %}</label>
+          <input type="number" id="weight_lifted" name="weight_lifted" min="0" step="0.1" placeholder="e.g. 185" required>
+        </div>
+        <div class="field">
+          <label for="reps">Reps performed{% if calc.get('faq_reps_note') %} ({{ calc.faq_reps_note }}){% endif %}</label>
+          <input type="number" id="reps" name="reps" min="1" max="12" step="1" placeholder="e.g. 5" required>
+          <span class="hint">Capped at 12 reps for formula accuracy.</span>
+        </div>
+      {% elif calc.input_type == "reps_only" %}
+        {% if calc.has_variant_toggle %}
+        <fieldset class="field">
+          <legend>Variant</legend>
+          <label class="pill"><input type="radio" name="variant" value="wall" checked> Wall-assisted</label>
+          <label class="pill"><input type="radio" name="variant" value="freestanding"> Freestanding</label>
+        </fieldset>
+        {% endif %}
+        <div class="field">
+          <label for="reps">Reps performed{{ ' (' + calc.unit_label.replace('reps','').strip() + ')' if 'per leg' in calc.unit_label else '' }}</label>
+          <input type="number" id="reps" name="reps" min="0" step="1" placeholder="e.g. 15" required>
+        </div>
+      {% elif calc.input_type == "time_only" %}
+        <div class="field">
+          <label for="seconds">Hold time (seconds)</label>
+          <input type="number" id="seconds" name="seconds" min="0" step="1" placeholder="e.g. 20" required>
+        </div>
+      {% endif %}
+
+      <div class="field">
+        <label for="age">Age <span class="hint">(optional, display only)</span></label>
+        <input type="number" id="age" name="age" min="10" max="100" step="1" placeholder="e.g. 29">
+      </div>
+
+      <button type="submit" class="btn-primary">Calculate my tier</button>
+      <p class="form-error" id="form-error" hidden></p>
+    </form>
+
+    <!-- ---------------------------- RESULTS ---------------------------- -->
+    <div class="calc-result" id="calc-result" hidden>
+      <div class="result-tier">
+        <span class="result-tier-label">Your tier</span>
+        <span class="result-tier-name" id="result-tier-name">—</span>
+      </div>
+
+      <div class="plate-gauge" id="plate-gauge" aria-hidden="true">
+        <div class="plate-gauge-track">
+          {% for t in tier_order %}
+          <div class="plate-gauge-seg" data-tier="{{ t }}"><span>{{ t[0] }}</span></div>
+          {% endfor %}
+        </div>
+        <div class="plate-gauge-fill" id="plate-gauge-fill"></div>
+        <div class="plate-marker" id="plate-marker"></div>
+      </div>
+      <p class="result-progress-note" id="result-progress-note"></p>
+
+      <dl class="result-stats" id="result-stats"></dl>
+    </div>
+
+    <div class="calc-result calc-result-empty" id="calc-result-empty">
+      <p>Fill in the form and hit <strong>Calculate my tier</strong> to see your
+      estimated {{ 'one-rep max, ' if calc.input_type in ('reps_weighted','ratio_external') else '' }}strength ratio, and where you land from Beginner to Elite.</p>
+    </div>
+  </section>
+
+  <!-- ------------------------- STANDARDS TABLE ------------------------- -->
+  <section class="standards-table-section">
+    <h2>{{ calc.name }} strength standards</h2>
+    <div class="table-toggle" role="tablist" aria-label="Sex">
+      <button type="button" class="table-toggle-btn is-active" data-table-sex="male">Male</button>
+      <button type="button" class="table-toggle-btn" data-table-sex="female">Female</button>
+    </div>
+
+    {% if calc.has_variant_toggle %}
+      {% for sex in ["male", "female"] %}
+      <div class="standards-table-wrap" data-table-for="{{ sex }}" {% if sex != 'male' %}hidden{% endif %}>
+        {% for variant, label in [("wall","Wall-assisted"), ("freestanding","Freestanding")] %}
+        <h3 class="table-variant-label">{{ label }}</h3>
+        <table class="standards-table">
+          <thead><tr><th>Tier</th><th>{{ calc.unit_label }}</th></tr></thead>
+          <tbody>
+          {% for row in table_data[sex][variant] %}
+            <tr><td>{{ row.tier }}</td><td>{{ row.range }}</td></tr>
+          {% endfor %}
+          </tbody>
+        </table>
+        {% endfor %}
+      </div>
+      {% endfor %}
+    {% else %}
+      {% for sex in ["male", "female"] %}
+      <div class="standards-table-wrap" data-table-for="{{ sex }}" {% if sex != 'male' %}hidden{% endif %}>
+        <table class="standards-table">
+          <thead><tr><th>Tier</th><th>{{ calc.unit_label }}</th></tr></thead>
+          <tbody>
+          {% for row in table_data[sex] %}
+            <tr><td>{{ row.tier }}</td><td>{{ row.range }}</td></tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% endfor %}
+    {% endif %}
+  </section>
+
+  <!-- ------------------------------- FAQ ------------------------------- -->
+  <section class="faq-section">
+    <h2>What is a good {{ calc.short|lower }}?</h2>
+    <div class="faq-list">
+      {% for q, a in calc.faq %}
+      <details class="faq-item">
+        <summary>{{ q }}</summary>
+        <p>{{ a }}</p>
+      </details>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- --------------------------- RELATED LINKS -------------------------- -->
+  <section class="related-section">
+    <h2>Related strength standards calculators</h2>
+    <ul class="related-grid">
+      {% for r in related %}
+      <li><a href="{{ url_for('calculator_page', slug=r.slug) }}">{{ r.name }}</a></li>
+      {% endfor %}
+    </ul>
+  </section>
+
+</article>
+{% endblock %}

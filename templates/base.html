@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Strength Standards Calculators{% endblock %}</title>
+<meta name="description" content="{% block meta_desc %}Free strength standards calculators for barbell lifts and calisthenics. See your estimated 1RM, bodyweight ratio, and strength tier.{% endblock %}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+{% block extra_head %}{% endblock %}
+</head>
+<body>
+<div class="chalk-noise" aria-hidden="true"></div>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="{{ url_for('hub') }}">
+      <span class="brand-mark">SS</span>
+      <span class="brand-text">Strength<em>Standards</em></span>
+    </a>
+    <span class="header-tag">15 calculators &middot; barbell + bodyweight</span>
+  </div>
+</header>
+
+<main>
+{% block content %}{% endblock %}
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <p class="disclaimer">
+      <strong>Not medical advice.</strong> These calculators provide fitness
+      estimates for informational purposes only, based on published
+      bodyweight-ratio and rep-based strength standards. They are not a
+      substitute for professional medical or coaching guidance — check with
+      a doctor before starting a new training program.
+    </p>
+    <p class="footer-links">
+      <a href="{{ url_for('hub') }}">All 15 calculators</a>
+    </p>
+  </div>
+</footer>
+
+<script src="{{ url_for('static', filename='js/calculator.js') }}"></script>
+</body>
+</html>
