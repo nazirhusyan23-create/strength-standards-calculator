@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% block title %}Privacy Policy — Strength Standards Calculators{% endblock %}
+{% block meta_desc %}Privacy policy for Strength Standards: what data is collected, how cookies and Google AdSense are used, and your choices.{% endblock %}
+{% block content %}
+<section class="static-page wrap">
+  <p class="eyebrow">Privacy Policy</p>
+  <h1>Privacy Policy</h1>
+  <p class="page-updated">Last updated: {{ updated_date }}</p>
+
+  <div class="static-content">
+    <p>
+      This policy explains what information Strength Standards
+      ("this site," "we," "us") collects when you visit, how it's used, and
+      the choices you have. By using this site you agree to the practices
+      described below.
+    </p>
+
+    <h2>Information you enter into the calculators</h2>
+    <p>
+      The calculators ask for bodyweight, sex, and lift details (weight
+      lifted, reps, or hold time) so they can estimate a one-rep max and a
+      strength tier. Those values are sent to our server to be calculated
+      and the result is returned to your browser — <strong>they are not
+      stored, logged against you, or linked to any identity</strong>. We
+      don't require an account, and there's no database of calculator
+      submissions.
+    </p>
+
+    <h2>Log data</h2>
+    <p>
+      Like most websites, our hosting provider automatically records
+      standard technical information for every request — IP address,
+      browser type, device type, referring page, and timestamps — used only
+      for security, abuse prevention, and understanding aggregate traffic.
+      This is not tied to the values you enter into a calculator.
+    </p>
+
+    <h2>Cookies and similar technologies</h2>
+    <p>
+      This site itself doesn't set cookies to track you across visits. The
+      advertising and analytics services described below may set their own
+      cookies or similar identifiers in your browser, subject to their own
+      policies and to your consent choices where required by law.
+    </p>
+
+    <h2>Advertising — Google AdSense</h2>
+    <p>
+      This site shows ads served by <strong>Google AdSense</strong>. Google
+      and its advertising partners may use cookies, device identifiers, or
+      similar technologies to serve ads based on your prior visits to this
+      or other websites, and to measure ad performance.
+    </p>
+    <ul>
+      <li>
+        You can review or opt out of personalized advertising through
+        Google's own settings at
+        <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer">adssettings.google.com</a>.
+      </li>
+      <li>
+        You can also visit
+        <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer">aboutads.info/choices</a>
+        to opt out of participating third-party vendors' use of cookies for
+        personalized advertising.
+      </li>
+      <li>
+        More detail on how Google uses data from sites that use its
+        services is available at
+        <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer">policies.google.com/technologies/partner-sites</a>.
+      </li>
+    </ul>
+    <p>
+      Third-party ad vendors, including Google, may also use cookies to
+      serve ads based on prior visits to this website or other websites.
+      This site does not control the cookies set by these third parties;
+      their use is governed by their own privacy policies.
+    </p>
+
+    <h2>Analytics</h2>
+    <p>
+      We may use standard web analytics tools to understand aggregate
+      traffic patterns — which pages are visited, roughly how long, and
+      from what general region or device type. This data is aggregated and
+      is not used to identify you personally.
+    </p>
+
+    <h2>Children's privacy</h2>
+    <p>
+      This site is not directed at children under 13, and we do not
+      knowingly collect personal information from children. If you believe
+      a child has provided personal information through this site, please
+      contact us using the details below and we'll remove it.
+    </p>
+
+    <h2>Your choices and rights</h2>
+    <p>
+      Depending on where you live, you may have rights to access, correct,
+      or request deletion of personal data collected about you, and to
+      object to or restrict certain processing, including personalized
+      advertising. Because this site does not maintain accounts or store
+      your calculator inputs, there is generally no personal data tied to
+      you to retrieve or delete beyond standard log data and any
+      advertising identifiers managed by Google and its partners — see the
+      links above to manage those directly. You can also reach out using
+      the contact details below with any privacy request.
+    </p>
+
+    <h2>Changes to this policy</h2>
+    <p>
+      We may update this policy from time to time, for example to reflect
+      changes in the advertising services we use or in applicable law. The
+      "last updated" date at the top of this page reflects the most recent
+      revision. Continued use of the site after a change constitutes
+      acceptance of the updated policy.
+    </p>
+
+    <h2>Contact</h2>
+    <p>
+      Questions about this policy or a privacy request can be sent to
+      <a href="mailto:{{ contact_email }}">{{ contact_email }}</a>, or via
+      the <a href="{{ url_for('contact') }}">Contact page</a>.
+    </p>
+  </div>
+</section>
+{% endblock %}

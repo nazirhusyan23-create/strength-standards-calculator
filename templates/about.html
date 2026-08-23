@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}About — Strength Standards Calculators{% endblock %}
+{% block meta_desc %}How the Strength Standards calculator collection works, where the bodyweight-ratio tiers come from, and who built it.{% endblock %}
+{% block content %}
+<section class="static-page wrap">
+  <p class="eyebrow">About</p>
+  <h1>About Strength Standards</h1>
+
+  <div class="static-content">
+    <h2>What this site does</h2>
+    <p>
+      Strength Standards is a small collection of 15 single-purpose calculators
+      for barbell lifts and calisthenics movements. You enter a set you've
+      actually performed — bodyweight, sex, and either a working set with
+      reps or a hold time — and the calculator converts it into a
+      bodyweight-adjusted strength ratio, then places that ratio into one of
+      five tiers: Beginner, Novice, Intermediate, Advanced, or Elite.
+    </p>
+    <p>
+      The idea behind bodyweight ratios is simple: raw numbers on a barbell
+      don't tell you much on their own. A 140&nbsp;lb lifter deadlifting
+      245&nbsp;lb and a 220&nbsp;lb lifter deadlifting 385&nbsp;lb are both
+      pulling about 1.75&times; bodyweight — equally strong relative to their
+      frame, even though the plates loaded are very different. Ranking by
+      ratio instead of raw weight makes it possible to compare lifters of
+      different sizes on a level footing.
+    </p>
+
+    <h2>How the numbers are calculated</h2>
+    <p>
+      For the six barbell-lift calculators (bench press, squat, deadlift,
+      overhead press, weighted pull-up, weighted dip), a single working set
+      of weight and reps is converted to an estimated one-rep max using the
+      <strong>Epley formula</strong> (<code>1RM = weight &times; (1 + reps
+      &divide; 30)</code>, capped at 12 reps for accuracy), then divided by
+      bodyweight to get the ratio used for tiering.
+    </p>
+    <p>
+      For the nine bodyweight and calisthenics calculators (pull-up, chin-up,
+      dip, ring dip, push-up, muscle-up, pistol squat, handstand push-up,
+      L-sit), reps or hold time are used directly, or converted to a
+      bodyweight ratio the same way when added weight is involved — since a
+      bodyweight movement doesn't always need external load to be a
+      meaningful strength test.
+    </p>
+    <p>
+      All of the math — the 1RM estimate, the ratio, the tier lookup, and the
+      progress toward the next tier — runs server-side in Python each time
+      you submit a calculator. Nothing is pre-computed or approximated in
+      the browser.
+    </p>
+
+    <h2>Where the tier thresholds come from</h2>
+    <p>
+      The Beginner-through-Elite breakpoints for each lift are assembled from
+      commonly cited bodyweight-ratio strength standards and calisthenics
+      progression benchmarks, cross-checked across a handful of published
+      sources for consistency between lifts. They're a reasonable general
+      reference point, not a scientific measurement of your individual
+      capacity — genetics, training age, limb length, and technique all
+      affect where an individual lifter's numbers actually land. See the
+      disclaimer in the footer of every page, and treat your tier as a
+      rough benchmark rather than a verdict.
+    </p>
+
+    <h2>Who's behind this</h2>
+    <p>
+      Strength Standards is an independently run reference site built and
+      maintained by one person with an interest in strength training and
+      calisthenics — not a gym, a supplement brand, or a certified coaching
+      practice. It doesn't sell programs, coaching, or products; the
+      calculators are free to use and the site earns a small amount from
+      display advertising, which helps cover hosting.
+    </p>
+    <p>
+      Questions, corrections, or a threshold that looks off for a particular
+      lift? Get in touch on the <a href="{{ url_for('contact') }}">Contact
+      page</a> — corrections to the standards are always welcome.
+    </p>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Contact — Strength Standards Calculators{% endblock %}
+{% block meta_desc %}Get in touch about the Strength Standards calculators — corrections, questions, or feedback.{% endblock %}
+{% block content %}
+<section class="static-page wrap">
+  <p class="eyebrow">Contact</p>
+  <h1>Get in touch</h1>
+
+  <div class="static-content">
+    <p>
+      This site is run and maintained by one person, so the fastest way to
+      reach me is email. I read every message, though replies can take a
+      few days.
+    </p>
+  </div>
+
+  <dl class="contact-card">
+    <dt>Email</dt>
+    <dd><a href="mailto:{{ contact_email }}">{{ contact_email }}</a></dd>
+  </dl>
+
+  <div class="static-content">
+    <h2>What to write in about</h2>
+    <ul>
+      <li><strong>Standards corrections</strong> — if a Beginner/Novice/Advanced/Elite
+        threshold for a specific lift looks off, let me know which
+        calculator and what you'd expect instead; sources are appreciated
+        but not required.</li>
+      <li><strong>Bugs</strong> — a calculator giving an obviously wrong tier
+        or result, a broken page, or something not working on your device.
+        Mentioning your browser and device helps.</li>
+      <li><strong>New calculators</strong> — suggestions for lifts or
+        movements not currently covered.</li>
+      <li><strong>Advertising or partnerships</strong> — general inquiries
+        are welcome, though this is a small independent site.</li>
+      <li><strong>Privacy requests</strong> — see the
+        <a href="{{ url_for('privacy') }}">Privacy Policy</a> for how to
+        reach out about data or advertising preferences.</li>
+    </ul>
+    <p>
+      This isn't a coaching or medical consultation service — for training
+      programs or health concerns, please talk to a qualified coach or
+      doctor. See the disclaimer in the site footer.
+    </p>
+  </div>
+</section>
+{% endblock %}

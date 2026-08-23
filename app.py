@@ -19,6 +19,7 @@ app = Flask(__name__)
 LB_PER_KG = 2.20462
 
 ADSENSE_PUBLISHER_ID = "pub-2006445566626425"
+CONTACT_EMAIL = "nh6639741@gmail.com"
 
 
 # --------------------------------------------------------------------
@@ -143,6 +144,22 @@ def calculator_page(slug):
     )
 
 
+@app.route("/about")
+def about():
+    return render_template("about.html")
+
+
+@app.route("/privacy-policy")
+def privacy():
+    return render_template("privacy.html", contact_email=CONTACT_EMAIL,
+                            updated_date=date.today().strftime("%B %-d, %Y"))
+
+
+@app.route("/contact")
+def contact():
+    return render_template("contact.html", contact_email=CONTACT_EMAIL)
+
+
 # --------------------------------------------------------------------
 # API — computation happens server-side (Python backend)
 # --------------------------------------------------------------------
@@ -254,6 +271,11 @@ def sitemap():
             "priority": "0.8",
         }
         for s in ORDER
+    ]
+    urls += [
+        {"loc": url_for("about", _external=True), "priority": "0.5"},
+        {"loc": url_for("privacy", _external=True), "priority": "0.3"},
+        {"loc": url_for("contact", _external=True), "priority": "0.5"},
     ]
     xml_parts = ['<?xml version="1.0" encoding="UTF-8"?>',
                  '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
