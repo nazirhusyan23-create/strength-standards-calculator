@@ -8,13 +8,17 @@ Run:
 
 Then open http://127.0.0.1:5000/
 """
-from flask import Flask, render_template, request, jsonify, abort
+from datetime import date
+
+from flask import Flask, render_template, request, jsonify, abort, Response, url_for
 
 from data import CALCULATORS, ORDER, TIER_ORDER
 
 app = Flask(__name__)
 
 LB_PER_KG = 2.20462
+
+ADSENSE_PUBLISHER_ID = "pub-2006445566626425"
 
 
 # --------------------------------------------------------------------
@@ -218,6 +222,52 @@ def calculate(slug):
 
     result["sex"] = sex
     return jsonify(result)
+
+
+# --------------------------------------------------------------------
+# AdSense / SEO — must be served at the domain root, not under /static
+# --------------------------------------------------------------------
+@app.route("/ads.txt")
+def ads_txt():
+    content = f"google.com, {ADSENSE_PUBLISHER_ID}, DIRECT, f08c47fec0942fa0\n"
+    return Response(content, mimetype="text/plain")
+
+
+@app.route("/robots.txt")
+def robots_txt():
+    sitemap_url = request.url_root.rstrip("/") + "/sitemap.xml"
+    content = (
+        "User-agent: *\n"
+        "Allow: /\n\n"
+        f"Sitemap: {sitemap_url}\n"
+    )
+    return Response(content, mimetype="text/plain")
+
+
+@app.route("/sitemap.xml")
+def sitemap():
+    today = date.today().isoformat()
+    urls = [{"loc": url_for("hub", _external=True), "priority": "1.0"}]
+    urls += [
+        {
+            "loc": url_for("calculator_page", slug=s, _external=True),
+            "priority": "0.8",
+        }
+        for s in ORDER
+    ]
+    xml_parts = ['<?xml version="1.0" encoding="UTF-8"?>',
+                 '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
+    for u in urls:
+        xml_parts.append(
+            "<url>"
+            f"<loc>{u['loc']}</loc>"
+            f"<lastmod>{today}</lastmod>"
+            "<changefreq>monthly</changefreq>"
+            f"<priority>{u['priority']}</priority>"
+            "</url>"
+        )
+    xml_parts.append("</urlset>")
+    return Response("".join(xml_parts), mimetype="application/xml")
 
 
 if __name__ == "__main__":

@@ -45,7 +45,47 @@ Open http://127.0.0.1:5000/ — the hub page links to all 15 calculators.
 Formula (site-wide, per the brief): `1RM = weight × (1 + reps/30)` (Epley),
 reps capped at 12 for accuracy.
 
+## Search Console, AdSense & SEO plumbing (added)
+
+- **Google Search Console verification** — the meta tag is baked into
+  `templates/base.html` (`<meta name="google-site-verification" ...>`), so
+  it's live on every page automatically. Once deployed, just click
+  "Verify" in Search Console.
+- **`ads.txt`** — served at the domain root via a Flask route
+  (`app.py` → `/ads.txt`), not a static file, because AdSense requires it
+  at exactly `https://yourdomain.com/ads.txt`. Content:
+  `google.com, pub-2006445566626425, DIRECT, f08c47fec0942fa0`
+- **AdSense loader script** — added to `<head>` in `base.html`, so it's on
+  every page site-wide (required for AdSense account approval/crawling).
+- **`robots.txt`** and **`sitemap.xml`** — also served via Flask routes
+  (`/robots.txt`, `/sitemap.xml`), auto-generated from `data.ORDER` so
+  every calculator page (plus the hub) is listed with no manual upkeep.
+  `robots.txt` points crawlers at the sitemap automatically using the
+  live request host, so it works the same in dev and production.
+
+### Avoiding the "ads on screens without publisher-content" violation
+
+AdSense rejects pages with thin/no content around the ad — that's the
+policy hit in the screenshot you shared. Two things this project already
+does to avoid it:
+
+1. Every calculator page has real content above any future ad slot: an
+   intro paragraph, the calculator, a full standards table, and a 3-question
+   FAQ — never just a bare form.
+2. The hub page (`/`) now has an "About" section explaining the
+   bodyweight-ratio concept, not just a grid of links.
+
+**No `<ins class="adsbygoogle">` ad units are placed yet** — you don't have
+slot IDs to give me. `templates/calculator.html` has a comment block right
+after the FAQ (i.e. below substantial content, never above it and never on
+the empty pre-calculation state) showing exactly where to drop your ad
+unit `<ins>`/`<script>` snippet once AdSense gives you slot IDs. Don't
+place ads on the hub grid or the empty "fill in the form" result panel —
+that's exactly the "screens without publisher-content" pattern Google
+flagged in your screenshot.
+
 ## ⚠️ Before you publish — verify the tier numbers
+
 
 Per the brief's own instructions, the thresholds in `data.py` are
 **reasonable estimates, not authoritative data**. I ballpark-checked a
